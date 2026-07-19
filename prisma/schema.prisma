@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum AuthMethod {
+  GOOGLE_SKKU
+  EMAIL_OTP
+}
+
+enum ScholarshipSource {
+  CAMPUS
+  EXTERNAL
+}
+
+enum ScholarshipType {
+  TUITION
+  LIVING
+}
+
+enum ApplyStatus {
+  OPEN
+  CLOSED
+}
+
+enum MatchStatus {
+  ELIGIBLE
+  CONDITIONAL
+  INELIGIBLE
+}
+
+model User {
+  id             String            @id @default(cuid())
+  email          String            @unique
+  name           String?
+  studentId      String?
+  department     String?
+  authMethod     AuthMethod
+  createdAt      DateTime          @default(now())
+  profile        StudentProfile?
+  bookmarks      Bookmark[]
+  applications   ApplicationStatus[]
+  calendarEvents CalendarEvent[]
+}
+
+model StudentProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id])
+  gradeLevel        Int?
+  gpaRecentSemester Float?
+  gpaCumulative     Float?
+  creditsRecent     Int?
+  incomeBracket     Int?
+  specialStatus     String[]
+  rawExtraction     Json?
+  updatedAt         DateTime @updatedAt
+}
+
+model Scholarship {
+  id                    String   @id @default(cuid())
+  name                  String
+  source                ScholarshipSource
+  type                  ScholarshipType
+  amount                String
+  eligibilityRules      Json
+  requiredDocs          String[]
+  applyStart            DateTime?
+  applyEnd              DateTime?
+  officialUrl           String?
+  pdfFormUrl            String?
+  duplicateConflictRules Json?
+  riskFlags             String[]
+  status                ApplyStatus
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  applications         ApplicationStatus[]
+  bookmarks            Bookmark[]
+  calendarEvents       CalendarEvent[]
+}
+
+model ApplicationStatus {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  scholarshipId String
+  scholarship   Scholarship @relation(fields: [scholarshipId], references: [id])
+  status        MatchStatus
+  reasonText    String?
+  computedAt    DateTime @default(now())
+}
+
+model Bookmark {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  scholarshipId String
+  scholarship   Scholarship @relation(fields: [scholarshipId], references: [id])
+  createdAt     DateTime @default(now())
+}
+
+model CalendarEvent {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  scholarshipId String
+  scholarship   Scholarship @relation(fields: [scholarshipId], references: [id])
+  eventType     String
+  dueDate       DateTime
+}
+
+model CrawlLog {
+  id            String   @id @default(cuid())
+  sourceUrl     String
+  scholarshipId String?
+  crawledAt     DateTime @default(now())
+  rawSnapshot   Json
+  reviewed      Boolean  @default(false)
+}

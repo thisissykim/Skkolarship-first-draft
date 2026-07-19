@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Skkolarship Full App Preview</title>
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --card: #ffffff;
+        --line: #dbe4f0;
+        --text: #0f172a;
+        --muted: #64748b;
+        --accent: #0f172a;
+        --cyan: #06b6d4;
+        --blue: #1d4ed8;
+        --amber: #f59e0b;
+        --rose: #e11d48;
+        --green: #10b981;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #eef6ff 0%, var(--bg) 30%, #fff 100%);
+        color: var(--text);
+      }
+      a { color: inherit; text-decoration: none; }
+      .wrap { max-width: 1380px; margin: 0 auto; padding: 24px; }
+      .topbar {
+        position: sticky; top: 0; z-index: 20;
+        backdrop-filter: blur(14px);
+        background: rgba(248,250,252,.85);
+        border: 1px solid rgba(219,228,240,.85);
+        border-radius: 22px;
+        padding: 14px 18px;
+        display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      }
+      .nav { display: flex; gap: 8px; flex-wrap: wrap; }
+      .nav a {
+        padding: 9px 13px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: white;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .nav a:hover { background: #eef2ff; }
+      .hero {
+        margin-top: 18px;
+        background: radial-gradient(circle at top right, rgba(6,182,212,.18), transparent 30%),
+                    linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+        color: white;
+        border-radius: 30px;
+        padding: 34px;
+        box-shadow: 0 28px 70px rgba(15, 23, 42, .18);
+      }
+      .hero h1 { margin: 0; font-size: clamp(32px, 4vw, 58px); line-height: 1.05; }
+      .hero p { margin: 14px 0 0; max-width: 860px; color: rgba(255,255,255,.82); line-height: 1.7; }
+      .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin-top: 18px; }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, .04);
+      }
+      .span-12 { grid-column: span 12; }
+      .span-8 { grid-column: span 8; }
+      .span-7 { grid-column: span 7; }
+      .span-6 { grid-column: span 6; }
+      .span-5 { grid-column: span 5; }
+      .span-4 { grid-column: span 4; }
+      .span-3 { grid-column: span 3; }
+      .section-title { margin: 0 0 10px; font-size: 20px; }
+      .label { font-size: 12px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); margin-bottom: 10px; }
+      .muted { color: var(--muted); }
+      .small { font-size: 13px; line-height: 1.65; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        border: 0; border-radius: 14px; padding: 12px 16px; font: inherit; font-weight: 600; cursor: pointer;
+      }
+      .btn.primary { background: var(--accent); color: white; }
+      .btn.cyan { background: var(--cyan); color: white; }
+      .btn.ghost { background: #e2e8f0; color: var(--text); }
+      .btn.rose { background: #ffe4e6; color: #9f1239; }
+      .btn.blue { background: #dbeafe; color: #1d4ed8; }
+      .btn.full { width: 100%; }
+      .input, .select, .textarea {
+        width: 100%; border: 1px solid var(--line); background: white; border-radius: 14px;
+        padding: 12px 14px; font: inherit;
+      }
+      .textarea { min-height: 100px; resize: vertical; }
+      .pill, .badge {
+        display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; font-size: 12px; font-weight: 700;
+        padding: 6px 10px;
+      }
+      .pill { border: 1px solid var(--line); background: white; color: var(--muted); }
+      .pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+      .badge.yellow { background: #fef3c7; color: #92400e; }
+      .badge.blue { background: #dbeafe; color: #1d4ed8; }
+      .badge.gray { background: #e2e8f0; color: #334155; }
+      .badge.green { background: #d1fae5; color: #047857; }
+      .badge.rose { background: #ffe4e6; color: #9f1239; }
+      .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+      .chip {
+        border: 1px solid var(--line); background: white; border-radius: 999px; padding: 10px 13px; font-size: 13px;
+      }
+      .chip.on { background: #0f172a; color: white; border-color: #0f172a; }
+      .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+      .kpis > div {
+        border: 1px solid var(--line); background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+        border-radius: 18px; padding: 16px;
+      }
+      .kpis strong { display: block; font-size: 24px; margin-top: 8px; }
+      .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .divider { height: 1px; background: var(--line); margin: 16px 0; }
+      .stack { display: grid; gap: 12px; }
+      .warning {
+        border-left: 4px solid var(--amber); background: #fffbeb; padding: 12px 14px; border-radius: 14px;
+      }
+      .danger {
+        border-left: 4px solid var(--rose); background: #fff1f2; padding: 12px 14px; border-radius: 14px;
+      }
+      .success {
+        border-left: 4px solid var(--green); background: #ecfdf5; padding: 12px 14px; border-radius: 14px;
+      }
+      .list { margin: 0; padding-left: 18px; }
+      .list li { margin: 6px 0; }
+      .upload-box {
+        border: 2px dashed var(--line); background: #f8fbff; border-radius: 26px; min-height: 220px;
+        padding: 24px; display: grid; place-items: center; text-align: center;
+      }
+      .upload-box.drag { border-color: var(--cyan); background: #ecfeff; }
+      .table { width: 100%; border-collapse: collapse; }
+      .table th, .table td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+      .calendar {
+        display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+      }
+      .day {
+        min-height: 88px; border: 1px solid var(--line); border-radius: 14px; background: white; padding: 8px;
+        font-size: 12px;
+      }
+      .day.muted { opacity: .35; }
+      .tag-row { display: flex; gap: 8px; flex-wrap: wrap; }
+      .tag { padding: 5px 9px; border-radius: 999px; background: #eef2ff; color: #1d4ed8; font-size: 11px; font-weight: 700; }
+      .sidebar {
+        position: sticky;
+        top: 92px;
+      }
+      .page { display: none; }
+      .page.active { display: block; }
+      .fade { animation: fade .18s ease; }
+      @keyframes fade { from { opacity: .3; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+      .field-row {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr auto;
+        gap: 10px;
+        align-items: center;
+      }
+      .tiny { font-size: 12px; color: var(--muted); }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+      @media (max-width: 980px) {
+        .span-8, .span-7, .span-6, .span-5, .span-4, .span-3 { grid-column: span 12; }
+        .grid2, .grid3, .kpis, .field-row { grid-template-columns: 1fr; }
+        .sidebar { position: static; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <div style="font-weight:800;">Skkolarship Full Preview</div>
+        <div class="nav">
+          <a href="#landing">랜딩</a>
+          <a href="#login">로그인</a>
+          <a href="#onboarding">온보딩</a>
+          <a href="#dashboard">대시보드</a>
+          <a href="#detail">상세</a>
+          <a href="#calendar">캘린더</a>
+          <a href="#admin">관리자</a>
+        </div>
+      </div>
+
+      <div class="hero">
+        <span class="badge blue">전체 서비스 확인용 HTML</span>
+        <h1 style="margin-top:14px;">성균관대 장학금 매칭 서비스 전체 플로우 미리보기</h1>
+        <p>
+          랜딩, 로그인, 온보딩, 장학금 대시보드, 상세/서류 준비, 캘린더, 관리자 검수까지 한 파일에서 확인할 수 있게 구성했습니다.
+          성적증명서는 실제로 파일을 첨부하는 구조로 넣었고, 실제 OCR 추출은 Upstage 같은 API가 있어야 동작합니다.
+        </p>
+      </div>
+
+      <div class="grid">
+        <section class="card span-12" id="landing">
+          <div class="label">Landing</div>
+          <div class="grid2">
+            <div>
+              <h2 class="section-title">나에게 딱 맞는 장학금 추천받기</h2>
+              <p class="muted small">
+                성적표와 기본 정보를 입력하면 지원가능, 조건부가능, 지원불가를 자동 분류하고 최적 조합까지 보여주는 화면입니다.
+              </p>
+              <div style="margin-top:16px;" class="tag-row">
+                <span class="tag">교내</span>
+                <span class="tag">교외</span>
+                <span class="tag">조건부</span>
+                <span class="tag">캘린더</span>
+              </div>
+              <div class="divider"></div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <a href="#onboarding" class="btn primary">추천받기</a>
+                <a href="#login" class="btn ghost">로그인</a>
+              </div>
+            </div>
+            <div class="card" style="background:#f8fbff;">
+              <div class="kpis">
+                <div><span class="tiny">지원가능</span><strong>12</strong></div>
+                <div><span class="tiny">조건부</span><strong>8</strong></div>
+                <div><span class="tiny">지원불가</span><strong>34</strong></div>
+                <div><span class="tiny">찜</span><strong>5</strong></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card span-12" id="login">
+          <div class="label">Login</div>
+          <div class="grid2">
+            <div class="card">
+              <h2 class="section-title">학교 Google 계정</h2>
+              <p class="muted small">hd=g.skku.edu 힌트 + 서버 재검증</p>
+              <div class="divider"></div>
+              <button class="btn primary full">Google로 로그인</button>
+            </div>
+            <div class="card">
+              <h2 class="section-title">@skku.edu 이메일 OTP</h2>
+              <p class="muted small">인증코드 발송 / 5분 유효 / 1분 rate limit</p>
+              <div class="stack">
+                <input class="input" placeholder="name@skku.edu" />
+                <div class="field-row">
+                  <button class="btn cyan">인증코드 받기</button>
+                  <input class="input" placeholder="6자리 코드" />
+                  <button class="btn primary">확인</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card span-12" id="onboarding">
+          <div class="label">Onboarding</div>
+          <h2 class="section-title">성적증명서 업로드 → 공통 8문항 → 특수계층/지역연고 → 조건부 질문</h2>
+          <div class="pill active">1. 업로드</div>
+          <div class="pill">2. 공통 8문항</div>
+          <div class="pill">3. 특수계층</div>
+          <div class="pill">4. 지역연고</div>
+          <div class="pill">5. 조건부 질문</div>
+          <div class="divider"></div>
+          <div class="grid">
+            <div class="card span-7">
+              <div class="upload-box" id="uploadBox">
+                <div>
+                  <h3 style="margin:0 0 8px;">성적증명서 파일 첨부</h3>
+                  <p class="muted small" style="margin:0 0 14px;">PDF / PNG / JPG 파일을 드래그하거나 선택하세요.</p>
+                  <input id="transcriptInput" type="file" accept=".pdf,.png,.jpg,.jpeg" />
+                  <p class="tiny" style="margin-top:10px;">실제 추출은 업로드 후 Upstage API 또는 mock parser가 필요합니다.</p>
+                </div>
+              </div>
+              <div id="loadingBox" class="warning small" style="display:none; margin-top:12px;">분석 중...</div>
+              <div id="parsedBox" class="card" style="margin-top:14px; display:none; background:#f8fafc;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                  <strong>자동으로 채웠어요</strong>
+                  <span class="badge yellow">확인 필요</span>
+                </div>
+                <div class="divider"></div>
+                <table class="table">
+                  <tbody id="parsedRows"></tbody>
+                </table>
+                <button class="btn primary" style="margin-top:16px;">확인했어요, 다음으로</button>
+              </div>
+            </div>
+            <div class="card span-5">
+              <h3 class="section-title">공통 8문항 예시</h3>
+              <div class="tiny">3/8</div>
+              <div style="height:8px;background:#e2e8f0;border-radius:999px;margin:10px 0 16px;">
+                <div style="width:37.5%;height:100%;background:var(--cyan);border-radius:999px;"></div>
+              </div>
+              <div class="label">현재 수혜 중인 장학금</div>
+              <div class="chips">
+                <span class="chip">없음</span>
+                <span class="chip on">국가장학금</span>
+                <span class="chip">교내</span>
+                <span class="chip">교외재단/기업</span>
+                <span class="chip">부모직장학자금지원</span>
+              </div>
+              <div class="divider"></div>
+              <div class="success small">
+                8문항 완료 즉시 1차 매칭 결과가 계산됩니다.
+              </div>
+            </div>
+          </div>
+          <div class="grid" style="margin-top:18px;">
+            <div class="card span-6">
+              <h3 class="section-title">특수계층</h3>
+              <p class="muted small">해당하는 항목을 모두 선택. “해당없음” 선택 시 스킵 가능.</p>
+              <div class="chips" style="margin-top:12px;">
+                <span class="chip">장애인</span>
+                <span class="chip">중증장애인</span>
+                <span class="chip">기초생활수급자</span>
+                <span class="chip">차상위계층</span>
+                <span class="chip">한부모</span>
+                <span class="chip">탈북민</span>
+                <span class="chip">다문화</span>
+                <span class="chip">이주배경</span>
+                <span class="chip">자립준비청년</span>
+                <span class="chip">가족돌봄</span>
+                <span class="chip">국가유공자</span>
+                <span class="chip">독립유공자후손</span>
+                <span class="chip">보훈대상자</span>
+                <span class="chip">다자녀</span>
+                <span class="chip">LH임대주택거주</span>
+                <span class="chip on">해당없음</span>
+              </div>
+              <div class="warning small" style="margin-top:12px;">왜 물어보나요? 일부 장학금은 특수계층 증빙을 기준으로 자동 필터링됩니다.</div>
+            </div>
+            <div class="card span-6">
+              <h3 class="section-title">지역연고</h3>
+              <p class="muted small">출신고교 소재지 / 본인 출생지 / 부모 원적·거주지</p>
+              <div class="stack" style="margin-top:12px;">
+                <input class="input" placeholder="출신고교 소재지" />
+                <input class="input" placeholder="본인 출생지" />
+                <input class="input" placeholder="부모 원적·거주지" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card span-12" id="dashboard">
+          <div class="label">Dashboard</div>
+          <div class="grid">
+            <div class="span-8">
+              <h2 class="section-title">장학금 대시보드</h2>
+              <div class="pill active">ELIGIBLE</div>
+              <div class="pill">CONDITIONAL</div>
+              <div class="pill">INELIGIBLE</div>
+              <div class="pill">찜한 장학금</div>
+              <div class="divider"></div>
+              <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;">
+                <div class="tag-row">
+                  <span class="tag">등록금성</span><span class="tag">교내</span><span class="tag">마감임박</span><span class="tag">추천서 필요</span>
+                </div>
+                <div class="grid2" style="min-width:320px;">
+                  <select class="select">
+                    <option>마감 빠른 순</option>
+                    <option>장학금액 큰 순</option>
+                    <option>적합도 높은 순</option>
+                  </select>
+                  <button class="btn ghost">필터</button>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="grid2">
+                <div class="card">
+                  <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
+                    <div>
+                      <div class="tag-row">
+                        <span class="tag">지원가능</span><span class="tag">교내</span><span class="tag">등록금성</span>
+                      </div>
+                      <h3>성적우수장학금</h3>
+                      <p class="muted small">등록금 범위 내 / 마감 2026-07-24</p>
+                    </div>
+                    <button class="btn rose">♡</button>
+                  </div>
+                  <div class="warning small" style="margin-top:12px;">직전학기 이수학점 기준에 근접하여 성적 확정 후 재확인이 필요합니다.</div>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+                    <a href="#detail" class="btn primary">상세 보기</a>
+                    <span class="btn ghost">공고 링크</span>
+                  </div>
+                </div>
+                <div class="card">
+                  <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
+                    <div>
+                      <div class="tag-row">
+                        <span class="tag">조건부가능</span><span class="tag">교외</span><span class="tag">생활비성</span>
+                      </div>
+                      <h3>미래인재 생활비 장학금</h3>
+                      <p class="muted small">월 50만원 / 국가장학금 신청 필요</p>
+                    </div>
+                    <button class="btn rose">♥</button>
+                  </div>
+                  <div class="warning small" style="margin-top:12px;">국가장학금 신청 여부가 입력되지 않아 조건부 가능으로 분류했습니다.</div>
+                </div>
+              </div>
+            </div>
+            <div class="span-4 sidebar">
+              <div class="card">
+                <h3 class="section-title">최대 수령 가능 조합</h3>
+                <div class="success small">등록금성 + 생활비성 조합을 충돌 규칙에 따라 계산합니다.</div>
+                <div class="divider"></div>
+                <ul class="list small">
+                  <li>성적우수장학금</li>
+                  <li>미래인재 생활비 장학금</li>
+                </ul>
+                <p class="muted small" style="margin-top:12px;">이 장학금과 충돌하여 제외되었습니다 툴팁 표시 가능</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card span-12" id="detail">
+          <div class="label">Detail</div>
+          <div class="grid">
+            <div class="span-7">
+              <h2 class="section-title">상세 / 서류 준비</h2>
+              <div class="grid2">
+                <div class="card">
+                  <div class="label">자격요건</div>
+                  <pre class="small mono" style="white-space:pre-wrap;margin:0;">{
+  gpa_recent_min: 3.0,
+  credits_recent_min: 12,
+  income_bracket_max: 8,
+  grade_levels: [2,3,4],
+  requiresNationalScholarshipApplication: true
+}</pre>
+                </div>
+                <div class="card">
+                  <div class="label">리스크 알림</div>
+                  <div class="warning small">추천서 요청은 최소 10일 전에 미리 하세요.</div>
+                  <div class="warning small" style="margin-top:10px;">온라인 마감과 내부 마감이 다르면 더 이른 날짜를 우선 확인하세요.</div>
+                  <div class="warning small" style="margin-top:10px;">성적이 기준에 아슬아슬하게 걸리면 재확인이 필요합니다.</div>
+                </div>
+              </div>
+              <div class="card" style="margin-top:12px;">
+                <div class="label">역산 일정 체크리스트</div>
+                <table class="table">
+                  <tbody>
+                    <tr><td><input type="checkbox" /> 마감 D-10</td><td>추천서 요청</td><td class="muted">2026-07-14</td></tr>
+                    <tr><td><input type="checkbox" /> 마감 D-7</td><td>자기소개서 초안 완성</td><td class="muted">2026-07-17</td></tr>
+                    <tr><td><input type="checkbox" /> 마감 D-3</td><td>증빙서류 발급</td><td class="muted">2026-07-21</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="span-5">
+              <div class="card">
+                <div class="label">캘린더</div>
+                <div class="calendar">
+                  <div class="tiny">S</div><div class="tiny">M</div><div class="tiny">T</div><div class="tiny">W</div><div class="tiny">T</div><div class="tiny">F</div><div class="tiny">S</div>
+                  <div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day">1</div>
+                  <div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day">5</div><div class="day">6</div><div class="day">7</div><div class="day">8</div>
+                  <div class="day">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div><div class="day">13</div><div class="day">14</div><div class="day">15</div>
+                  <div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div><div class="day">20</div><div class="day">21</div><div class="day">22</div>
+                  <div class="day">23<div class="badge blue" style="margin-top:8px;">마감</div></div>
+                  <div class="day">24</div><div class="day">25</div><div class="day">26</div><div class="day">27</div><div class="day">28</div><div class="day">29</div><div class="day">30</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card span-12" id="calendar">
+          <div class="label">Calendar</div>
+          <h2 class="section-title">찜한 장학금 마감일 월간 뷰</h2>
+          <p class="muted small">찜한 장학금들의 마감일만 간단한 커스텀 캘린더로 표시합니다.</p>
+          <div class="calendar" style="margin-top:12px;">
+            <div class="tiny">S</div><div class="tiny">M</div><div class="tiny">T</div><div class="tiny">W</div><div class="tiny">T</div><div class="tiny">F</div><div class="tiny">S</div>
+            <div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day muted"></div><div class="day">1</div>
+            <div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day">5</div><div class="day">6</div><div class="day">7<div class="badge yellow" style="margin-top:8px;">디딤돌</div></div><div class="day">8</div>
+            <div class="day">9</div><div class="day">10<div class="badge blue" style="margin-top:8px;">추천서</div></div><div class="day">11</div><div class="day">12</div><div class="day">13<div class="badge green" style="margin-top:8px;">마감</div></div><div class="day">14</div><div class="day">15</div>
+            <div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div><div class="day">20</div><div class="day">21</div><div class="day">22</div>
+            <div class="day">23</div><div class="day">24</div><div class="day">25</div><div class="day">26</div><div class="day">27</div><div class="day">28</div><div class="day">29</div>
+          </div>
+        </section>
+
+        <section class="card span-12" id="admin">
+          <div class="label">Admin</div>
+          <h2 class="section-title">관리자 검수 / 크롤링 반영</h2>
+          <div class="grid2">
+            <div class="card">
+              <div class="label">검수 대기</div>
+              <ul class="list small">
+                <li>정용지 창의장학생 - 추천서 확인 필요</li>
+                <li>조병두장학금 - 등록금/생활비 선택 규칙 확인 필요</li>
+                <li>신규 외부 장학금 - 금액 정보 보강 필요</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="label">반영 버튼</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn primary">승인</button>
+                <button class="btn ghost">보류</button>
+                <button class="btn rose">삭제</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card span-12">
+          <div class="label">API</div>
+          <h2 class="section-title">성적증명서 추출 구조에 대해</h2>
+          <div class="warning small">
+            네, 실제 성적증명서 정보를 추출하려면 Upstage API 같은 OCR/Information Extract API가 필요합니다.
+            이 HTML 미리보기는 브라우저에서 첨부만 보여주고, 실제 파싱 결과는 mock 또는 서버 연동이 있어야 생성됩니다.
+          </div>
+          <p class="muted small" style="margin-top:12px;">
+            원하시면 다음 단계에서 Upstage API 키를 받는 전제로 실제 추출 라우트까지 연결해드릴 수 있습니다.
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const input = document.getElementById("transcriptInput");
+      const parsedBox = document.getElementById("parsedBox");
+      const loadingBox = document.getElementById("loadingBox");
+      const uploadBox = document.getElementById("uploadBox");
+      const parsedRows = document.getElementById("parsedRows");
+
+      const mock = [
+        ["대학", "성균관대학교", true],
+        ["단과대학", "경영대학", false],
+        ["학과", "경영학과", false],
+        ["학년", "3학년", false],
+        ["학기", "3-1", false],
+        ["누적 평점", "3.72 / 4.5", true],
+        ["백분율", "91", false],
+        ["직전학기 평점", "3.80", true],
+        ["직전학기 이수학점", "15", false],
+        ["F학점 유무", "없음", false],
+        ["누적 이수학점", "87", false],
+      ];
+
+      function renderRows() {
+        parsedRows.innerHTML = mock.map(([label, value, confirm]) => `
+          <tr>
+            <th style="width:180px;">${label} ${confirm ? '<span class="badge yellow" style="margin-left:8px;">확인 필요</span>' : ''}</th>
+            <td>${value}</td>
+            <td><button class="btn blue" type="button">✎</button></td>
+          </tr>
+        `).join("");
+      }
+      renderRows();
+
+      if (input) {
+        input.addEventListener("change", () => {
+          const file = input.files && input.files[0];
+          if (!file) return;
+          loadingBox.style.display = "block";
+          parsedBox.style.display = "none";
+          uploadBox.classList.add("drag");
+          setTimeout(() => {
+            loadingBox.style.display = "none";
+            parsedBox.style.display = "block";
+            uploadBox.classList.remove("drag");
+            parsedBox.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 1500);
+        });
+      }
+    </script>
+  </body>
+</html>
