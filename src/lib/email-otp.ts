@@ -1,10 +1,16 @@
-import crypto from "crypto";
-import nodemailer from "nodemailer";
-
 type OtpRecord = {
   code: string;
   expiresAt: number;
   createdAt: number;
+};
+
+type NodemailerTransport = {
+  sendMail: (options: {
+    from: string;
+    to: string;
+    subject: string;
+    text: string;
+  }) => Promise<unknown>;
 };
 
 const otpStore = new Map<string, OtpRecord>();
@@ -15,7 +21,9 @@ function now() {
 }
 
 function generateCode() {
-  return crypto.randomInt(100000, 1000000).toString();
+  const bytes = new Uint32Array(1);
+  globalThis.crypto.getRandomValues(bytes);
+  return String(100000 + (bytes[0] % 900000));
 }
 
 function canSend(email: string) {
@@ -23,25 +31,16 @@ function canSend(email: string) {
   return !sentAt || now() - sentAt >= 60_000;
 }
 
-function smtpTransport() {
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
-  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) return null;
-  return nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: Number(SMTP_PORT),
-    secure: Number(SMTP_PORT) === 465,
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
-    },
-  });
-}
-
 async function sendOtpEmail(email: string, code: string) {
   const from = process.env.SMTP_FROM ?? process.env.SMTP_USER;
-  const transport = smtpTransport();
 
-  if (!transport || !from) {
+  if (!from) {
+    console.log(`[mock-otp] send to ${email}: ${code}`);
+    return;
+  }
+
+  const transport = await smtpTransport();
+  if (!transport) {
     console.log(`[mock-otp] send to ${email}: ${code}`);
     return;
   }
@@ -51,6 +50,22 @@ async function sendOtpEmail(email: string, code: string) {
     to: email,
     subject: "[Skkolarship] 이메일 인증코드",
     text: `인증코드: ${code}\n5분 안에 입력해주세요.`,
+  });
+}
+
+async function smtpTransport(): Promise<NodemailerTransport | null> {
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) return null;
+
+  const nodemailer = await import("nodemailer");
+  return nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: Number(SMTP_PORT),
+    secure: Number(SMTP_PORT) === 465,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS,
+    },
   });
 }
 
