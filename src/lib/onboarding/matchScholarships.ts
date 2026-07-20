@@ -1,4 +1,4 @@
-import type { Scholarship } from "@/types/scholarship";
+import type { Scholarship as AppScholarship } from "@/lib/scholarships";
 import type { CommonAnswers, ParsedTranscript, StudentProfileFull } from "@/types/onboarding";
 import { matchScholarship as baseMatchScholarship } from "@/engine/matchScholarship";
 
@@ -50,11 +50,11 @@ export function buildOnboardingProfile(
   } as StudentProfileFull;
 }
 
-export function judge(profile: StudentProfileFull, scholarship: Scholarship) {
-  return baseMatchScholarship(profile, scholarship as never);
+export function judge(profile: StudentProfileFull, scholarship: AppScholarship) {
+  return baseMatchScholarship(profile as never, scholarship as never);
 }
 
-export function matchScholarships(profile: StudentProfileFull, scholarships: Scholarship[]) {
+export function matchScholarships(profile: StudentProfileFull, scholarships: AppScholarship[]) {
   return scholarships.map((scholarship) => {
     const match = judge(profile, scholarship);
     return {
