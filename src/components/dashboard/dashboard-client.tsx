@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 import type { Scholarship, ScholarshipStatus } from "@/lib/scholarships";
 import FilterBar from "@/components/dashboard/filter-bar";
 import ScholarshipCard from "@/components/dashboard/scholarship-card";
@@ -55,13 +57,36 @@ export default function DashboardClient({ scholarships }: Props) {
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <div className="mx-auto max-w-7xl px-6 py-10">
         <div className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-xl shadow-slate-300/20">
-          <p className="text-sm font-semibold tracking-[0.25em] text-cyan-300">SKKOLARSHIP</p>
+          <div className="flex items-start justify-between gap-4">
+            <p className="text-sm font-semibold tracking-[0.25em] text-cyan-300">SKKOLARSHIP</p>
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              className="shrink-0 rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+            >
+              로그아웃
+            </button>
+          </div>
           <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <h1 className="text-3xl font-semibold sm:text-4xl">장학금 대시보드</h1>
               <p className="mt-3 max-w-2xl text-slate-300">
                 지원 가능성, 조건부 가능성, 찜한 장학금을 한곳에서 확인할 수 있습니다.
               </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-3">
+              <Link
+                href="/onboarding/common"
+                className="rounded-xl border border-white/20 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+              >
+                정보 수정
+              </Link>
+              <Link
+                href="/onboarding/upload"
+                className="rounded-xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+              >
+                성적증명서 재업로드
+              </Link>
             </div>
           </div>
         </div>

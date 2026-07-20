@@ -59,7 +59,17 @@ export interface RegionAffinity {
 }
 
 export interface StudentProfileFull
-  extends Omit<BaseStudentProfile, "region" | "currentScholarships" | "income_bracket">,
+  extends Omit<
+      BaseStudentProfile,
+      | "region"
+      | "currentScholarships"
+      | "income_bracket"
+      | "credits_recent"
+      | "gpa_recent"
+      | "gpa_cumulative"
+      | "grade_level"
+      | "major"
+    >,
     Partial<ParsedTranscript>,
     Partial<CommonAnswers> {
   special_status: SpecialStatus[];
@@ -68,7 +78,6 @@ export interface StudentProfileFull
   wish_career?: string | null;
   research_plan?: string | null;
   school_name?: string | null;
-  region?: RegionAffinity;
   next_semester_status?: CommonAnswers["next_semester_status"];
   remaining_regular_semesters?: number;
   low_income_type?: CommonAnswers["low_income_type"];

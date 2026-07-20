@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
+  --background: #f4f6f9;
+  --foreground: #0b1c31;
 }
 
 html {
@@ -15,8 +15,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, rgba(34, 211, 238, 0.12), transparent 30%),
-    linear-gradient(180deg, #020617 0%, #0f172a 100%);
+  background: radial-gradient(circle at top, rgba(28, 156, 103, 0.08), transparent 32%),
+    linear-gradient(180deg, #f4f6f9 0%, #e8edf3 100%);
 }
 
 a {

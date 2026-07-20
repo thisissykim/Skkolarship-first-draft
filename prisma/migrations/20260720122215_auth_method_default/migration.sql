@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "authMethod" SET DEFAULT 'GOOGLE_SKKU';

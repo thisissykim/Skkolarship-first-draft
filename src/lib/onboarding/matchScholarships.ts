@@ -1,6 +1,7 @@
 import type { Scholarship as AppScholarship } from "@/lib/scholarships";
 import type { CommonAnswers, ParsedTranscript, StudentProfileFull } from "@/types/onboarding";
 import { matchScholarship as baseMatchScholarship } from "@/engine/matchScholarship";
+import { convertScholarship } from "@/lib/scholarship-adapter";
 
 export function buildOnboardingProfile(
   transcript: ParsedTranscript,
@@ -51,7 +52,7 @@ export function buildOnboardingProfile(
 }
 
 export function judge(profile: StudentProfileFull, scholarship: AppScholarship) {
-  return baseMatchScholarship(profile as never, scholarship as never);
+  return baseMatchScholarship(profile as never, convertScholarship(scholarship));
 }
 
 export function matchScholarships(profile: StudentProfileFull, scholarships: AppScholarship[]) {
