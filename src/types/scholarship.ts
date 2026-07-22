@@ -40,7 +40,23 @@ export interface ScholarshipEligibility {
   special_status: string[];
   major_requirement: string | null;
   region_requirement: string | null;
+  // Alternative ways to qualify beyond the flat gpa_recent_min/gpa_cumulative_min
+  // fields above (e.g. 동암장학회's "성적우수 장학생" vs "생활 장학생", entirely
+  // different requirement bundles rather than the same bar on a different scale).
+  // Met if the flat fields pass OR any one path passes; null/empty means no
+  // alternative paths exist, same as before this field existed.
+  eligibility_paths: EligibilityPath[] | null;
   other_conditions: string | null;
+}
+
+export interface EligibilityPath {
+  label: string;
+  gpa_recent_min?: number | null;
+  gpa_cumulative_min?: number | null;
+  gpa_scale?: 4.5 | 4.3 | 100;
+  // Met if the student's special_status/derived categories include ANY one of these
+  // (same canonical tokens as the main special_status matching).
+  special_status_any?: string[];
 }
 
 export interface DuplicateConflictRule {

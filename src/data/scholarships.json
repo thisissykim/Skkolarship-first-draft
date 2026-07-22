@@ -37,6 +37,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "성적우수자가 아닌 종합적 창의성/학내활동 기여도 등 정성 평가"
       },
       "duplicate_conflict": {
@@ -81,6 +82,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "직전학기 과락(F) 없어야 함. 외국인전형 입학자 제외. 초과등록생은 단과대/학과 기준에 따라 선발 여부 상이"
       },
       "duplicate_conflict": {
@@ -123,6 +125,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "행정/기술/입법고등고시, 외교관후보자시험 1차 합격자 또는 공인회계사/변리사 최종 합격자. 평점평균은 직전학기 기준(전체 평점평균 아님)"
       },
       "duplicate_conflict": {
@@ -172,6 +175,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "신입생은 성적 기준 없음. 신규신청자만 해당, 기존 신청자는 재신청 불필요"
       },
       "duplicate_conflict": {
@@ -218,6 +222,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "장학재단 소득분위가 산정되지 않았거나(부모 동의 불가 등) 현실을 반영 못하는 경우(6~10분위), 긴급 가계문제 등 정성적 사유"
       },
       "duplicate_conflict": {
@@ -265,6 +270,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "국가장학금(1유형) 신청 후 소득구간 산정·승인 필수. C학점경고제 승인자 중 직전학기 평점 1.5이상 2.0미만은 지급 불가"
       },
       "duplicate_conflict": {
@@ -312,6 +318,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "3월 25일 기준 소득구간 확정자 대상, 이후 확정자는 소급 지급. 신·편입생 성적기준 미적용"
       },
       "duplicate_conflict": {
@@ -358,6 +365,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "국가장학금 신청 후 소득구간이 기초생활수급자/차상위계층으로 통지된 신입생 중 새내기새로배움터 참석자"
       },
       "duplicate_conflict": {
@@ -402,6 +410,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "직전학기 평점평균 백분율 70점(평점 1.5) 이상 (국가유공자 본인·신입생 제외)"
       },
       "duplicate_conflict": {
@@ -448,6 +457,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "형제자매/직계3대/직계2대/부부/부모 모두 동문 등 5가지 유형 중 하나 충족, 신·편입생은 성적 기준 없음"
       },
       "duplicate_conflict": {
@@ -492,6 +502,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "충만한 애교심/도전정신 등 정성 평가 요소 포함"
       },
       "duplicate_conflict": {
@@ -537,6 +548,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "가정형편 곤란자, 교환학생 파견(해외체류) 예정자 신청 불가. 계속자는 매월 장학기금 납입 및 활동 참여 의무"
       },
       "duplicate_conflict": {
@@ -589,6 +601,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "9개 AI 마이크로디그리 과정 중 하나를 2026년 1학기에 이수, 4과목 평균 B+ 이상"
       },
       "duplicate_conflict": {
@@ -636,6 +649,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "의료AI 마이크로디그리(Track A/B) 또는 관련 대학원 과정 이수 중, 의료AI 관련 KCI급 이상 논문 출판(1저자/차석/교신), 사업 참여 누적 1년 이상, 타 인재양성사업 중복수혜 불가"
       },
       "duplicate_conflict": {
@@ -684,6 +698,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "학업 성취도/글로벌 리더십/잠재역량 종합평가. 지능형소프트웨어학과·반도체시스템공학과·응용AI융합학부·배터리학과 신입생, 외국인전형 입학자, 삼성과학인재Track 선발자는 지원 불가"
       },
       "duplicate_conflict": {
@@ -732,6 +747,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "대한민국 국적자, 성적기준은 재단 공지 참고. 재학생은 반드시 1차 신청기간 내 신청 필요(미신청 시 탈락)"
       },
       "duplicate_conflict": {
@@ -774,6 +790,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "직전학기 C0(70점) 이상, 장애인·자립준비청년은 성적기준 예외. 우선선발: 다자녀/다문화·탈북/국가보훈/장애 관련 가정 등"
       },
       "duplicate_conflict": {
@@ -818,6 +835,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "3학년(전공확립유형)은 직전학기까지 총평균 백분위 90점 또는 평점 3.6/4.5 이상, 이수학점 졸업요건의 40% 이상"
       },
       "duplicate_conflict": {
@@ -860,6 +878,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "은평구 2년 이상 계속 거주(주민등록 기준)",
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -900,6 +919,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "강남구 관내 연속 1년 이상 거주(공고일 기준)",
+        "eligibility_paths": null,
         "other_conditions": "1가구(세대)당 1명만 신청 가능, 정규학기 재학생만(휴학·교환·초과학기·졸업유예 제외). 국가장학금(한국장학재단) 수혜자는 신청 가능"
       },
       "duplicate_conflict": {
@@ -943,6 +963,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "송파구 연속 3년 이상 거주",
+        "eligibility_paths": null,
         "other_conditions": "가구(세대)당 1명 선발 원칙, 직전 학기 수혜자 제외"
       },
       "duplicate_conflict": {
@@ -983,6 +1004,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "수원시 2년 이상 계속 거주(주민등록 기준)",
+        "eligibility_paths": null,
         "other_conditions": "학업성적이 우수한 학생"
       },
       "duplicate_conflict": {
@@ -1025,6 +1047,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "수원시 2년 이상 계속 거주(주민등록 기준)",
+        "eligibility_paths": null,
         "other_conditions": "저소득층 가정의 학생"
       },
       "duplicate_conflict": {
@@ -1067,6 +1090,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "수원시 2년 이상 계속 거주(주민등록 기준)",
+        "eligibility_paths": null,
         "other_conditions": "4년제 대학 이공계 재학 우수학생"
       },
       "duplicate_conflict": {
@@ -1109,6 +1133,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "언론·미디어(PD/기자/아나운서/기획마케팅) 취업 희망자 + 사회배려대상자(증빙 필수). 1~7기 기수혜자 지원 불가"
       },
       "duplicate_conflict": {
@@ -1151,6 +1176,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "2학기 휴학 예정자 지원 불가, 부모 직장 학자금 지원 미수혜자, 최대 7학기 지속 지원(매학기 재심사)"
       },
       "duplicate_conflict": {
@@ -1201,6 +1227,27 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "경주시 출생·거주 또는 원적이 경주시 강동면",
+        "eligibility_paths": [
+          {
+            "label": "성적우수 장학생",
+            "gpa_recent_min": 3.5,
+            "gpa_cumulative_min": 3.5,
+            "gpa_scale": 4.5
+          },
+          {
+            "label": "생활 장학생",
+            "gpa_recent_min": 3,
+            "gpa_cumulative_min": 3,
+            "gpa_scale": 4.5,
+            "special_status_any": [
+              "기초생활수급자",
+              "차상위계층",
+              "다자녀",
+              "다문화",
+              "탈북민"
+            ]
+          }
+        ],
         "other_conditions": "성적우수 장학생: 누적·직전학기 3.5(4.5만점)/3.3(4.3만점) 이상. 생활 장학생: 누적·직전학기 B학점 이상 + 저소득/다자녀/다문화/북한이탈주민 등 요건 1개 이상"
       },
       "duplicate_conflict": {
@@ -1239,7 +1286,7 @@
       "eligibility": {
         "grade_level": "2~4학년 재학(예정)",
         "college_requirement": null,
-        "gpa_recent_min": 3.5,
+        "gpa_recent_min": null,
         "gpa_cumulative_min": null,
         "gpa_scale": 4.5,
         "gpa_cumulative_min_alt": null,
@@ -1251,6 +1298,29 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": [
+          {
+            "label": "기본",
+            "gpa_recent_min": 3.5,
+            "gpa_scale": 4.5
+          },
+          {
+            "label": "가정형편이 어려운 경우",
+            "gpa_recent_min": 2.5,
+            "gpa_scale": 4.5,
+            "special_status_any": [
+              "기초생활수급자",
+              "차상위계층"
+            ]
+          },
+          {
+            "label": "본인/부모 장애인인 경우",
+            "special_status_any": [
+              "장애인",
+              "중증장애인"
+            ]
+          }
+        ],
         "other_conditions": "가정형편 어려운 경우 직전학기 2.5 이상도 가능. 부모/본인 장애인인 경우도 지원 가능. 불교학생회 소속 우선 선발"
       },
       "duplicate_conflict": {
@@ -1299,6 +1369,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "직전학기(또는 복학 직전학기) 평균 C학점 이상. 다문화가정·새터민가족 우대"
       },
       "duplicate_conflict": {
@@ -1351,6 +1422,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "2026년 6월 수여식 참석 필수(불참 시 선발 취소)"
       },
       "duplicate_conflict": {
@@ -1402,6 +1474,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "의학/약학/치의학/한의학/수의학/간호학 또는 보건의료정책 주제 사회복지학 연구. 학회지 논문 1저자/차석/교신저자 참여 예정. 박사학위 취득자·과거 수혜자·중복지원자 등은 불가"
       },
       "duplicate_conflict": {
@@ -1450,6 +1523,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "타 재단/기관 생활비성 장학금 미수혜자 우대(필수 아님)"
       },
       "duplicate_conflict": {
@@ -1495,6 +1569,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "대학원생은 학자금지원구간통지서 필수(형제자매 서류 대체 가능). 2026-2학기 해외교환/휴학(군휴학 포함) 예정자 지원 불가. 자립준비청년 우대"
       },
       "duplicate_conflict": {
@@ -1541,6 +1616,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "전년도 1,2학기 각 12학점 이상 이수, 가정형편 곤란자"
       },
       "duplicate_conflict": {
@@ -1591,6 +1667,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "전기·전자·기계·신소재공학 등 공학계열 재학생만 (신입생, 타장학금 수혜자, 대학원생 제외)"
       },
       "duplicate_conflict": {
@@ -1639,6 +1716,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "국내 대학 재학/재학예정(2026년 입학), 타 민간기관 장학금 중복수혜 불가"
       },
       "duplicate_conflict": {
@@ -1692,6 +1770,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -1739,6 +1818,7 @@
         ],
         "major_requirement": null,
         "region_requirement": "서울 소재 대학 재학 또는 서울시민(자녀)",
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -1781,6 +1861,7 @@
         ],
         "major_requirement": null,
         "region_requirement": "서울 소재 대학 재학 또는 서울시민(자녀)",
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -1824,6 +1905,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -1860,10 +1942,11 @@
         "gpa_condition_grades": null,
         "credits_recent_min": null,
         "credits_recent_min_last_semester": null,
-        "income_bracket_max": null,
+        "income_bracket_max": 7,
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "이공계 전 분야, 가구 중위소득 150% 이하(3가지 기준 중 1개), 마지막학기 재학생·전문대 재학생 지원 불가"
       },
       "duplicate_conflict": {
@@ -1904,6 +1987,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -1944,6 +2028,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "모교 교환학생 파견을 재학 중 최초 획득(예정), 파견 학점 모교 인정 가능해야 함"
       },
       "duplicate_conflict": {
@@ -1984,6 +2069,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "저소득 가정, 성적우수, 봉사정신, 예체능 재능 중 1개 이상 해당 (단 타 장학금 수혜 시 선발 제외, 국가장학금·교내·근로장학금은 예외)"
       },
       "duplicate_conflict": {
@@ -2027,6 +2113,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "국내 소재 대학 재학(대학교/전문대/사이버대/학점은행제 등), 잔여 정규학기 2개 학기 이상"
       },
       "duplicate_conflict": {
@@ -2067,6 +2154,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -2107,6 +2195,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "IT/블록체인 관련 진로 희망자, 직전학기 백분위 80점 이상·12학점 이상"
       },
       "duplicate_conflict": {
@@ -2147,6 +2236,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "학자금 지원구간 3구간 이내, 직전학기 백분위 80점 이상·12학점 이상"
       },
       "duplicate_conflict": {
@@ -2189,6 +2279,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "LH 임대주택 거주 대학생 중 학자금 지원구간 3구간 이하, 직전학기 백분위 80점 이상·12학점 이상"
       },
       "duplicate_conflict": {
@@ -2229,6 +2320,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "대학 1학년 전체 24학점 이상 이수, 재단이 우수평가한 15개 대학 소속 필요, 학교장 추천 필수"
       },
       "duplicate_conflict": {
@@ -2283,6 +2375,7 @@
         ],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -2330,6 +2423,7 @@
         "special_status": [],
         "major_requirement": "화학·바이오·화장품 관련 학과",
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "한국장학재단 이중지원심사 '지원 가능' 판정 필요"
       },
       "duplicate_conflict": {
@@ -2375,6 +2469,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": "석탄산업전환지역(정선/태백/영월/삼척/보령/문경/화순) 소재 고교 출신",
+        "eligibility_paths": null,
         "other_conditions": null
       },
       "duplicate_conflict": {
@@ -2417,6 +2512,7 @@
         "special_status": [],
         "major_requirement": null,
         "region_requirement": null,
+        "eligibility_paths": null,
         "other_conditions": "직전학기 백분위 70점, 12학점 이상 이수. 졸업 후 수혜 학기당 6개월(180일)씩 영농/농림축산식품 분야 의무 종사"
       },
       "duplicate_conflict": {

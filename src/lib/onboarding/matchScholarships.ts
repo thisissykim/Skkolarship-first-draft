@@ -35,6 +35,7 @@ export function buildOnboardingProfile(
     low_income_type: answers?.low_income_type,
     nationality: answers?.nationality,
     foreign_visa_type: answers?.foreign_visa_type,
+    birth_year: answers?.birth_year ?? null,
     can_attend_mandatory_events: answers?.can_attend_mandatory_events,
     region_affinity: extras?.region_affinity,
     wish_career: extras?.wish_career,

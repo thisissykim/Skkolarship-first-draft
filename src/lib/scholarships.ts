@@ -1,5 +1,6 @@
 import dataset from "@/data/scholarships.json";
 import type { MatchCriterion } from "@/engine/matchScholarship";
+import type { EligibilityPath } from "@/types/scholarship";
 
 export type ScholarshipStatus = "ELIGIBLE" | "CONDITIONAL" | "INELIGIBLE";
 export type ScholarshipType = "TUITION" | "LIVING";
@@ -45,6 +46,7 @@ export type Scholarship = {
     majorRequirement?: string | null;
     requiresNationalScholarshipApplication?: boolean;
     specialStatusRequired?: string[];
+    eligibilityPaths?: EligibilityPath[] | null;
     notes?: string | null;
   };
   duplicateConflictRules?: {
@@ -129,6 +131,7 @@ function convert(raw: RawScholarship): Scholarship {
       maxIncomeBracket: raw.eligibility.income_bracket_max,
       gradeLevels: raw.eligibility.grade_level ? [raw.eligibility.grade_level] : null,
       collegeRequirement: raw.eligibility.college_requirement,
+      eligibilityPaths: (raw.eligibility.eligibility_paths as EligibilityPath[] | null) ?? null,
       regionRequirement: raw.eligibility.region_requirement,
       majorRequirement: raw.eligibility.major_requirement,
       requiresNationalScholarshipApplication: raw.eligibility.other_conditions?.includes("국가장학금") ?? false,

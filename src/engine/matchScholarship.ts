@@ -129,6 +129,21 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
   // was ever connecting the two, so residency-only scholarships (구청/시 장학금)
   // always fell through as ELIGIBLE regardless of where the student lives.
   if (eligibility.region_requirement) {
+    // "OO 소재 대학 재학" is a university-location requirement, not a residence one,
+    // so it doesn't need profile.region at all. 성균관대학교는 학과가 서울(인문사회)
+    // 캠퍼스든 수원(자연과학) 캠퍼스든 관계없이 "서울 소재 대학"으로 인정되는 학교라
+    // 이 앱의 모든 사용자(성균관대 재학생)는 이 조건을 항상 충족한다.
+    const universityLocationMatch = eligibility.region_requirement.match(/([가-힣]{2,4})\s*소재\s*대학\s*재학/);
+    const schoolName = (profile as unknown as { school_name?: string | null }).school_name ?? null;
+
+    if (universityLocationMatch && universityLocationMatch[1] === "서울" && schoolName && /성균관대학교/.test(schoolName)) {
+      criteria.push({
+        key: "region",
+        label: "거주 지역",
+        met: true,
+        detail: `요구 지역: ${eligibility.region_requirement} / 성균관대학교 재학생은 캠퍼스와 무관하게 서울 소재 대학 재학 조건을 충족해요.`,
+      });
+    } else {
     const profileRegion = (profile as unknown as {
       region?: { sido?: string | null; sigungu?: string | null; years_resided?: number | null };
     }).region;
@@ -181,6 +196,7 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
         detail: `요구 지역: ${eligibility.region_requirement} / 내 거주 지역: ${studentDistrict || "미확인"}(${years}년 거주)`,
         actionHint: met ? undefined : "거주 지역이나 거주 기간이 바뀌면 다시 확인해보세요.",
       });
+    }
     }
   }
 
@@ -824,6 +840,37 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
     }
   }
 
+  // 청년창업농장학금 — "만 40세 미만(2026.1.1 기준)". 정확한 만 나이는 생월일까지
+  // 필요하지만, 온보딩에는 출생연도만 받고 있어 2026년 기준 나이로 근사한다.
+  if (scholarship.id === "ext-rural-youth-startup") {
+    const birthYear = (profile as unknown as { birth_year?: number | null }).birth_year ?? null;
+    if (birthYear == null) {
+      status = status === "지원불가" ? status : "조건부가능";
+      reasons.push("출생연도 정보가 없어 조건부 가능으로 분류했습니다.");
+      criteria.push({
+        key: "age",
+        label: "나이",
+        met: false,
+        detail: "요구 조건: 만 40세 미만(2026.1.1 기준) / 출생연도 정보 없음",
+        actionHint: "온보딩에서 출생연도를 입력해주세요.",
+      });
+    } else {
+      const approxAge = 2026 - birthYear;
+      const met = approxAge < 40;
+      if (!met) {
+        status = "지원불가";
+        unmetConditions.push("연령 조건 미충족");
+        reasons.push("이 장학금은 만 40세 미만만 지원 가능한데, 나이 조건에 해당하지 않습니다.");
+      }
+      criteria.push({
+        key: "age",
+        label: "나이",
+        met,
+        detail: `요구 조건: 만 40세 미만(2026.1.1 기준) / 출생연도 ${birthYear}년(약 ${approxAge}세)`,
+      });
+    }
+  }
+
   // 강원랜드 멘토링 장학 — region_requirement is about the student's *high school*
   // location ("석탄산업전환지역 소재 고교 출신"), not current residence, so the usual
   // "거주" parser doesn't apply. Checked directly against region_affinity.high_school_sido,
@@ -854,6 +901,66 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
         label: "출신고교 지역",
         met,
         detail: `요구 조건: 석탄산업전환지역 소재 고교 출신 / 내 출신고교 지역: ${highSchoolSido}`,
+      });
+    }
+  }
+
+  // 대체 자격경로 — 동암장학회("성적우수 장학생" vs "생활 장학생")처럼 서로 다른 요건
+  // 묶음 중 하나만 만족해도 되는 경우. 각 경로를 독립적으로 평가해서 하나라도 확실히
+  // 통과하면 met, 통과한 경로가 없는데 판별 불가한 경로가 남아있으면 조건부가능,
+  // 모든 경로가 확실히 실패했을 때만 지원불가로 떨어뜨린다.
+  if (eligibility.eligibility_paths && eligibility.eligibility_paths.length > 0) {
+    const profileTokens = resolveProfileSpecialStatusTokens(profile);
+
+    const pathStates = eligibility.eligibility_paths.map((path) => {
+      const parts: ("pass" | "fail" | "unknown")[] = [];
+      if (path.gpa_recent_min != null) {
+        parts.push(profile.gpa_recent == null ? "unknown" : profile.gpa_recent >= path.gpa_recent_min ? "pass" : "fail");
+      }
+      if (path.gpa_cumulative_min != null) {
+        parts.push(profile.gpa_cumulative == null ? "unknown" : profile.gpa_cumulative >= path.gpa_cumulative_min ? "pass" : "fail");
+      }
+      if (path.special_status_any && path.special_status_any.length > 0) {
+        parts.push(path.special_status_any.some((token) => profileTokens.has(token)) ? "pass" : "fail");
+      }
+      const state: "met" | "uncertain" | "failed" = parts.some((part) => part === "fail")
+        ? "failed"
+        : parts.some((part) => part === "unknown")
+          ? "uncertain"
+          : "met";
+      return { label: path.label, state };
+    });
+
+    const metPath = pathStates.find((path) => path.state === "met");
+    const uncertainPaths = pathStates.filter((path) => path.state === "uncertain");
+    const pathLabels = eligibility.eligibility_paths.map((path) => path.label).join(" / ");
+
+    if (metPath) {
+      criteria.push({
+        key: "eligibility_path",
+        label: "자격 경로",
+        met: true,
+        detail: `"${metPath.label}" 경로로 조건을 충족해요. (전체 경로: ${pathLabels})`,
+      });
+    } else if (uncertainPaths.length > 0) {
+      status = status === "지원불가" ? status : "조건부가능";
+      reasons.push(`자격 경로(${pathLabels}) 중 판별에 필요한 정보가 부족해 조건부 가능으로 분류했습니다.`);
+      criteria.push({
+        key: "eligibility_path",
+        label: "자격 경로",
+        met: false,
+        detail: `경로: ${pathLabels} — "${uncertainPaths.map((path) => path.label).join(", ")}" 경로는 정보 부족으로 판별이 어려워요.`,
+        actionHint: "성적·특수신분 정보를 다시 확인해주세요.",
+      });
+    } else {
+      status = "지원불가";
+      unmetConditions.push("자격 경로 미충족");
+      reasons.push(`자격 경로(${pathLabels}) 중 어느 것도 충족하지 못했습니다.`);
+      criteria.push({
+        key: "eligibility_path",
+        label: "자격 경로",
+        met: false,
+        detail: `경로: ${pathLabels} — 어느 경로도 충족하지 못했어요.`,
       });
     }
   }

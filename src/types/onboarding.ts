@@ -23,6 +23,7 @@ export interface ParsedTranscript {
 export interface CommonAnswers {
   nationality: "내국인" | "재외국민" | "외국인";
   foreign_visa_type?: string;
+  birth_year: number | null;
   next_semester_status: "재학" | "복학" | "휴학" | "졸업예정" | "초과학기" | "교환학생파견";
   remaining_regular_semesters: number;
   income_bracket: number | "미산정" | "모름";

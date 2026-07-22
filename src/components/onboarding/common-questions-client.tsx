@@ -44,6 +44,7 @@ function extractCommonAnswers(saved: Record<string, unknown>, fallback: CommonAn
     current_scholarships: (saved.current_scholarships as CommonAnswers["current_scholarships"]) ?? fallback.current_scholarships,
     can_attend_mandatory_events:
       (saved.can_attend_mandatory_events as CommonAnswers["can_attend_mandatory_events"]) ?? fallback.can_attend_mandatory_events,
+    birth_year: (saved.birth_year as number | null) ?? fallback.birth_year,
   };
 }
 
@@ -52,6 +53,7 @@ const fieldStyle =
 
 const defaultAnswers: CommonAnswers = {
   nationality: "내국인",
+  birth_year: null,
   next_semester_status: "재학",
   remaining_regular_semesters: 4,
   income_bracket: "모름",
@@ -106,6 +108,19 @@ export default function CommonQuestionsClient() {
             <option value="재외국민">재외국민</option>
             <option value="외국인">외국인</option>
           </select>
+        ),
+      },
+      {
+        id: "birth_year",
+        label: "출생연도 (선택)",
+        render: (
+          <input
+            className={fieldStyle}
+            type="number"
+            placeholder="예: 2003"
+            value={answers.birth_year ?? ""}
+            onChange={(event) => setAnswers({ ...answers, birth_year: event.target.value ? Number(event.target.value) : null })}
+          />
         ),
       },
       {
