@@ -1300,12 +1300,12 @@
         "region_requirement": null,
         "eligibility_paths": [
           {
-            "label": "기본",
+            "label": "일반 조건(평점 3.5 이상)",
             "gpa_recent_min": 3.5,
             "gpa_scale": 4.5
           },
           {
-            "label": "가정형편이 어려운 경우",
+            "label": "가정형편이 어려운 경우(평점 2.5 이상)",
             "gpa_recent_min": 2.5,
             "gpa_scale": 4.5,
             "special_status_any": [
@@ -1314,7 +1314,7 @@
             ]
           },
           {
-            "label": "본인/부모 장애인인 경우",
+            "label": "본인/부모 장애인인 경우(평점 무관)",
             "special_status_any": [
               "장애인",
               "중증장애인"
