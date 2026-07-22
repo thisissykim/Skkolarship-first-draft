@@ -4,14 +4,12 @@ import LoginForm from "@/components/login-form";
 export default function LoginPage() {
   return (
     <main
-      className="flex min-h-screen flex-col items-center justify-center bg-navy-950 px-6 py-20 text-white"
+      className="flex min-h-screen flex-col items-center justify-center bg-navy-950 bg-cover bg-center px-6 py-20 text-white"
       style={{
-        // Placeholder gradient until the SKKU campus photo asset is added —
-        // swap the background-image for the photo URL once available.
         backgroundImage:
-          "radial-gradient(circle at 28% 18%, rgba(52,184,128,0.28), transparent 55%), " +
-          "radial-gradient(circle at 75% 75%, rgba(45,77,112,0.45), transparent 50%), " +
-          "linear-gradient(180deg, #040d19 0%, #071526 55%, #040d19 100%)",
+          "radial-gradient(circle at 28% 18%, rgba(52,184,128,0.35), transparent 55%), " +
+          "linear-gradient(180deg, rgba(4,13,25,0.88) 0%, rgba(7,21,38,0.82) 55%, rgba(4,13,25,0.94) 100%), " +
+          "url(/brand/skku-campus.jpeg)",
       }}
     >
       <h1
