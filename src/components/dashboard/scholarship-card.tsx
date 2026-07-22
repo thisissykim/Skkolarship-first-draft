@@ -15,6 +15,12 @@ export default function ScholarshipCard({
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
   const isFavorite = favorites.includes(scholarship.id);
   const [justPopped, setJustPopped] = useState(false);
+  const [criteriaOpen, setCriteriaOpen] = useState(false);
+  const [risksOpen, setRisksOpen] = useState(false);
+
+  const criteria = scholarship.matchCriteria ?? [];
+  const metCount = criteria.filter((c) => c.met).length;
+  const unmetCount = criteria.length - metCount;
 
   function handleToggleFavorite() {
     toggleFavorite(scholarship.id);
@@ -75,48 +81,83 @@ export default function ScholarshipCard({
         </div>
       </div>
 
-      <div className="mt-5 rounded-2xl border border-slate-200 p-4">
-        <p className="text-sm font-medium text-slate-800">판단 근거</p>
-        {scholarship.matchCriteria && scholarship.matchCriteria.length > 0 ? (
-          <ul className="mt-3 space-y-2">
-            {scholarship.matchCriteria.map((criterion) => (
-              <li
-                key={criterion.key}
-                className={`rounded-xl px-3 py-2 text-sm ${criterion.met ? "bg-emerald-50" : "bg-rose-50"}`}
-              >
-                <div className="flex items-start gap-2">
-                  <span className={criterion.met ? "text-emerald-600" : "text-rose-600"}>
-                    {criterion.met ? "✓" : "✕"}
-                  </span>
-                  <div>
-                    <p className={`font-medium ${criterion.met ? "text-emerald-900" : "text-rose-900"}`}>
-                      {criterion.label}
-                    </p>
-                    <p className={criterion.met ? "text-emerald-700" : "text-rose-700"}>{criterion.detail}</p>
-                    {criterion.actionHint ? (
-                      <p className="mt-1 font-medium text-amber-700">💡 {criterion.actionHint}</p>
-                    ) : null}
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-800">
-            ⚠️ 이 장학금은 정량적 자격 조건(학년·평점·학점 등)이 데이터에 등록되어 있지 않아 자동으로 판단할 수 없어요.
-            공식 공고를 직접 확인해주세요.
-          </p>
-        )}
+      <div className="mt-5 rounded-2xl border border-slate-200">
+        <button
+          type="button"
+          onClick={() => setCriteriaOpen((value) => !value)}
+          className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
+        >
+          <span className="text-sm font-medium text-slate-800">판단 근거</span>
+          <span className="flex items-center gap-2 text-xs font-medium">
+            {criteria.length > 0 ? (
+              <>
+                <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700">충족 {metCount}</span>
+                {unmetCount > 0 ? (
+                  <span className="rounded-full bg-rose-50 px-2 py-1 text-rose-700">미충족 {unmetCount}</span>
+                ) : null}
+              </>
+            ) : (
+              <span className="rounded-full bg-amber-50 px-2 py-1 text-amber-700">판단 불가</span>
+            )}
+            <span className="text-slate-400">{criteriaOpen ? "▲" : "▼"}</span>
+          </span>
+        </button>
+
+        {criteriaOpen ? (
+          <div className="border-t border-slate-100 p-4 pt-3">
+            {criteria.length > 0 ? (
+              <ul className="space-y-2">
+                {criteria.map((criterion) => (
+                  <li
+                    key={criterion.key}
+                    className={`rounded-xl px-3 py-2 text-sm ${criterion.met ? "bg-emerald-50" : "bg-rose-50"}`}
+                  >
+                    <div className="flex items-start gap-2">
+                      <span className={criterion.met ? "text-emerald-600" : "text-rose-600"}>
+                        {criterion.met ? "✓" : "✕"}
+                      </span>
+                      <div>
+                        <p className={`font-medium ${criterion.met ? "text-emerald-900" : "text-rose-900"}`}>
+                          {criterion.label}
+                        </p>
+                        <p className={criterion.met ? "text-emerald-700" : "text-rose-700"}>{criterion.detail}</p>
+                        {criterion.actionHint ? (
+                          <p className="mt-1 font-medium text-amber-700">💡 {criterion.actionHint}</p>
+                        ) : null}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-800">
+                ⚠️ 이 장학금은 정량적 자격 조건(학년·평점·학점 등)이 데이터에 등록되어 있지 않아 자동으로 판단할 수
+                없어요. 공식 공고를 직접 확인해주세요.
+              </p>
+            )}
+          </div>
+        ) : null}
       </div>
 
-      <div className="mt-5 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-        <p className="font-medium text-slate-800">주의 사항</p>
-        <ul className="mt-2 space-y-1">
-          {scholarship.riskFlags.map((flag) => (
-            <li key={flag}>• {flag}</li>
-          ))}
-        </ul>
-      </div>
+      {scholarship.riskFlags.length > 0 ? (
+        <div className="mt-3 rounded-2xl bg-slate-50">
+          <button
+            type="button"
+            onClick={() => setRisksOpen((value) => !value)}
+            className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
+          >
+            <span className="text-sm font-medium text-slate-800">주의 사항 {scholarship.riskFlags.length}개</span>
+            <span className="text-xs text-slate-400">{risksOpen ? "▲" : "▼"}</span>
+          </button>
+          {risksOpen ? (
+            <ul className="space-y-1 px-4 pb-4 text-sm text-slate-600">
+              {scholarship.riskFlags.map((flag) => (
+                <li key={flag}>• {flag}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="mt-5 flex flex-wrap gap-3">
         <Link
