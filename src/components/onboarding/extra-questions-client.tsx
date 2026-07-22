@@ -105,7 +105,7 @@ export default function ExtraQuestionsClient() {
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-6 py-12">
       <div className="mb-8 flex justify-center">
-        <Logo size="sm" />
+        <Logo size="lg" />
       </div>
 
       <section className="rounded-[2rem] border border-navy-100 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(11,28,49,0.25)] sm:p-8">

@@ -8,7 +8,7 @@ import { buildOnboardingProfile, matchScholarships } from "@/lib/onboarding/matc
 import Logo from "@/components/brand/logo";
 
 const specialGroups = [
-  ["장애인", "중증장애인", "건강보험료", "재산세"],
+  ["장애인", "중증장애인"],
   ["탈북민", "다문화", "이주배경"],
   ["자립준비청년", "가족돌봄"],
   ["국가유공자", "독립유공자후손", "보훈대상자"],
@@ -30,7 +30,7 @@ export default function SpecialStatusClient() {
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-6 py-12">
       <div className="mb-8 flex justify-center">
-        <Logo size="sm" />
+        <Logo size="lg" />
       </div>
 
       <section className="rounded-[2rem] border border-navy-100 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(11,28,49,0.25)] sm:p-8">

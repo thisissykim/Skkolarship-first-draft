@@ -1262,8 +1262,6 @@ function detectSpecialStatusCategories(text: string): string[] {
   if (/가족돌봄/.test(text)) found.push("가족돌봄");
   if (/다자녀/.test(text)) found.push("다자녀");
   if (/LH\s*임대주택/.test(text)) found.push("LH임대주택거주");
-  if (/건강보험료/.test(text)) found.push("건강보험료");
-  if (/재산세/.test(text)) found.push("재산세");
 
   return Array.from(new Set(found));
 }
