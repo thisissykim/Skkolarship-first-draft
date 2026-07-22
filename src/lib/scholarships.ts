@@ -32,6 +32,7 @@ export type Scholarship = {
   eligibilityRules: {
     minGpaRecent?: number | null;
     minGpaCumulative?: number | null;
+    gpaScale?: number | null;
     minCreditsRecent?: number | null;
     maxIncomeBracket?: number | null;
     gradeLevels?: string[] | null;
@@ -113,6 +114,7 @@ function convert(raw: RawScholarship): Scholarship {
     eligibilityRules: {
       minGpaRecent: raw.eligibility.gpa_recent_min,
       minGpaCumulative: raw.eligibility.gpa_cumulative_min,
+      gpaScale: raw.eligibility.gpa_scale,
       minCreditsRecent: raw.eligibility.credits_recent_min,
       maxIncomeBracket: raw.eligibility.income_bracket_max,
       gradeLevels: raw.eligibility.grade_level ? [raw.eligibility.grade_level] : null,

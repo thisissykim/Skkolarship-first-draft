@@ -207,27 +207,38 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
     }
   }
 
-  // 누적 평점
+  // 누적 평점 — a few scholarships (서울인재대학, 서울인재해외교환학생, 현대차 CMK,
+  // 수림재단[자연계]) express this on a 100점 백분위 scale instead of the usual 4.5
+  // GPA scale (eligibility.gpa_scale marks which). The onboarding transcript already
+  // captures both (profile.gpa_cumulative on 4.5, profile.percentile_cumulative on
+  // 100), so pick whichever matches the requirement instead of always comparing a
+  // 4.5-scale number against a 100-point threshold, which used to always read as a
+  // huge shortfall (e.g. "4.3 < 90") and reject every student regardless of merit.
   if (eligibility.gpa_cumulative_min != null) {
-    if (profile.gpa_cumulative == null) {
+    const use100Scale = eligibility.gpa_scale === 100;
+    const percentileCumulative = (profile as unknown as { percentile_cumulative?: number | null }).percentile_cumulative ?? null;
+    const studentScore = use100Scale ? percentileCumulative : profile.gpa_cumulative;
+    const scaleLabel = use100Scale ? "백분위" : "평점";
+
+    if (studentScore == null) {
       status = status === "지원불가" ? status : "조건부가능";
-      reasons.push("전체 GPA 정보가 없어 조건부 가능으로 분류했습니다.");
+      reasons.push(`전체 ${scaleLabel} 정보가 없어 조건부 가능으로 분류했습니다.`);
       criteria.push({
         key: "gpa_cumulative",
         label: "누적 평점",
         met: false,
-        detail: `기준 ${eligibility.gpa_cumulative_min}점 이상 / 내 성적 정보 없음`,
+        detail: `기준 ${scaleLabel} ${eligibility.gpa_cumulative_min}점 이상 / 내 ${scaleLabel} 정보 없음`,
         actionHint: "성적증명서 정보를 다시 확인해주세요.",
       });
-    } else if (profile.gpa_cumulative < eligibility.gpa_cumulative_min) {
+    } else if (studentScore < eligibility.gpa_cumulative_min) {
       status = "지원불가";
       unmetConditions.push("누적 GPA 미달");
-      reasons.push(`전체 평점 기준 ${eligibility.gpa_cumulative_min}점이지만 현재 ${profile.gpa_cumulative}점입니다.`);
+      reasons.push(`전체 ${scaleLabel} 기준 ${eligibility.gpa_cumulative_min}점이지만 현재 ${studentScore}점입니다.`);
       criteria.push({
         key: "gpa_cumulative",
         label: "누적 평점",
         met: false,
-        detail: `기준 ${eligibility.gpa_cumulative_min}점 이상 / 내 성적 ${profile.gpa_cumulative}점`,
+        detail: `기준 ${scaleLabel} ${eligibility.gpa_cumulative_min}점 이상 / 내 ${scaleLabel} ${studentScore}점`,
         actionHint: "누적 평점을 더 올려보세요.",
       });
     } else {
@@ -235,7 +246,7 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
         key: "gpa_cumulative",
         label: "누적 평점",
         met: true,
-        detail: `기준 ${eligibility.gpa_cumulative_min}점 이상 / 내 성적 ${profile.gpa_cumulative}점`,
+        detail: `기준 ${scaleLabel} ${eligibility.gpa_cumulative_min}점 이상 / 내 ${scaleLabel} ${studentScore}점`,
       });
     }
   }
@@ -396,6 +407,46 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
         met,
         detail: `요구 전공: ${eligibility.major_requirement} / 내 전공: ${studentMajor}`,
         actionHint: met ? undefined : "전공이 바뀌면 다시 확인해보세요.",
+      });
+    }
+  }
+
+  // 국가장학금 신청 필수 — a few scholarships require the student to have gone
+  // through the 국가장학금(한국장학재단) application first (e.g. to get an official
+  // 소득구간 determination). other_conditions text merely *mentioning* "국가장학금"
+  // isn't a reliable enough signal on its own (some scholarships just note it as an
+  // allowed combination, not a requirement), so this only fires on the specific
+  // "신청 필수"/"신청 후" phrasing actually used for a real requirement.
+  const otherConditionsText = scholarship.eligibility.other_conditions ?? "";
+  if (/국가장학금[가-힣()0-9·\s]{0,10}신청\s*(?:필수|후)/.test(otherConditionsText)) {
+    const applied = (profile as unknown as { nationalScholarshipApplied?: boolean | null }).nationalScholarshipApplied ?? null;
+    if (applied == null) {
+      status = status === "지원불가" ? status : "조건부가능";
+      reasons.push("국가장학금 신청 여부가 확인되지 않아 조건부 가능으로 분류했습니다.");
+      criteria.push({
+        key: "national_scholarship",
+        label: "국가장학금 신청",
+        met: false,
+        detail: "이 장학금은 국가장학금(한국장학재단) 신청이 필수예요. 신청 여부 정보가 없어요.",
+        actionHint: "온보딩에서 현재 수혜 중인 장학금 정보를 확인해주세요.",
+      });
+    } else if (!applied) {
+      status = "지원불가";
+      unmetConditions.push("국가장학금 미신청");
+      reasons.push("이 장학금은 국가장학금 신청이 필수인데, 아직 신청하지 않은 것으로 확인됩니다.");
+      criteria.push({
+        key: "national_scholarship",
+        label: "국가장학금 신청",
+        met: false,
+        detail: "이 장학금은 국가장학금(한국장학재단) 신청이 필수예요.",
+        actionHint: "국가장학금을 먼저 신청해주세요.",
+      });
+    } else {
+      criteria.push({
+        key: "national_scholarship",
+        label: "국가장학금 신청",
+        met: true,
+        detail: "국가장학금 신청/수혜 이력이 확인됩니다.",
       });
     }
   }
