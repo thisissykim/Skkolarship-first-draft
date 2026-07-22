@@ -99,7 +99,10 @@ function convert(raw: RawScholarship): Scholarship {
     applyEnd: raw.apply_end,
     applyPeriodNote: raw.apply_period_note,
     officialUrl: raw.official_url,
-    pdfFormUrl: null,
+    // No real announcement PDFs are digitized yet — every scholarship links to
+    // the same clearly-labeled placeholder document instead of leaving this
+    // blank, so "원문 확인하기" always does something (see /docs/placeholder-announcement.pdf).
+    pdfFormUrl: "/docs/placeholder-announcement.pdf",
     requiredDocs: raw.required_docs,
     riskFlags: raw.risk_flags,
     tags: buildTags(raw),

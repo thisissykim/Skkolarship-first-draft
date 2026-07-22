@@ -79,27 +79,31 @@ export default function ScholarshipDetailPage({ params }: Props) {
             </InfoCard>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            {scholarship.officialUrl ? (
-              <a
-                href={scholarship.officialUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-xl bg-slate-950 px-4 py-3 text-sm font-medium text-white"
-              >
-                하이퍼링크 열기
-              </a>
-            ) : null}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             {scholarship.pdfFormUrl ? (
               <a
                 href={scholarship.pdfFormUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700"
+                className="rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:scale-105 active:scale-95"
               >
-                PDF 다운로드
+                원문 확인하기
               </a>
             ) : null}
+            {scholarship.officialUrl ? (
+              <a
+                href={scholarship.officialUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-xl bg-slate-950 px-4 py-3 text-sm font-medium text-white transition hover:scale-105 active:scale-95"
+              >
+                장학금 사이트로 바로가기
+              </a>
+            ) : (
+              <span className="text-xs text-slate-400">
+                운영 기관 공식 사이트가 아직 확인되지 않았어요. 공고문 원문에서 직접 확인해주세요.
+              </span>
+            )}
           </div>
         </section>
       </div>
