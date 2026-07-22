@@ -1028,6 +1028,25 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
     }
   }
 
+  // 자동 판별이 불가능한 조건이 남아있는 장학금 — 데이터 소스가 아예 없어서 다른
+  // 조건은 모두 통과해도 이 부분만큼은 확인해줄 수 없는 경우. 텍스트로만 두면 다른
+  // 조건이 다 통과했을 때 "지원가능"으로 잘못 뜰 수 있어서, 명시적으로 조건부가능
+  // 상한을 씌운다.
+  const manualVerificationNote = MANUAL_VERIFICATION_REQUIRED[scholarship.id];
+  if (manualVerificationNote) {
+    if (status === "지원가능") {
+      status = "조건부가능";
+    }
+    reasons.push(manualVerificationNote);
+    criteria.push({
+      key: "manual_verification",
+      label: "직접 확인 필요",
+      met: false,
+      detail: manualVerificationNote,
+      actionHint: "공식 공고를 통해 직접 확인해주세요.",
+    });
+  }
+
   if (scholarship.eligibility.other_conditions) {
     reasons.push(scholarship.eligibility.other_conditions);
   }
@@ -1178,6 +1197,20 @@ const CAREER_INTEREST_GATES: Record<string, { interest: string; requirementText:
     interest: "농업/창업",
     requirementText: "졸업 후 영농/농림축산식품 분야 의무 종사가 가능한 창업 희망자만 지원 가능해요.",
   },
+};
+
+// Conditions with no realistic onboarding data source at all (household-level
+// uniqueness, past-award history, degree records, department-level graduation
+// credit totals) — rather than silently letting these ride along as pure
+// informational text while status reads 지원가능, cap the status so the student
+// knows to verify manually.
+const MANUAL_VERIFICATION_REQUIRED: Record<string, string> = {
+  "ext-inmun-100nyeon": "이수학점이 졸업요건의 40% 이상인지는 학과별 졸업 필요 학점 정보가 없어 자동 판별이 어려워요.",
+  "ext-hyundai-cmk": "전문대 재학 여부는 자동 판별이 어려워요. 4년제 대학 재학생만 지원 가능해요.",
+  "ext-surim": "대학 1학년 때 24학점 이상 이수했는지는 학년별 이수학점 정보가 없어 자동 판별이 어려워요.",
+  "ext-songpa-injae": "가구(세대)당 1명 선발 원칙과 직전 학기 수혜 이력은 자동 판별이 어려워요.",
+  "ext-lotte-sinkyeokho": "1~7기 기수혜 이력은 자동 판별이 어려워요.",
+  "ext-bogeon-research": "박사학위 취득 여부와 과거 수혜 이력은 자동 판별이 어려워요.",
 };
 
 const LOW_INCOME_TYPE_TO_CATEGORY: Record<string, string> = {
