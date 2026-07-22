@@ -48,14 +48,14 @@ export function convertScholarship(source: (typeof scholarshipSeed)[number]): Ne
     eligibility: {
       grade_level: source.eligibilityRules.gradeLevels?.join(",") ?? null,
       gpa_recent_min: source.eligibilityRules.minGpaRecent ?? null,
-      gpa_cumulative_min: null,
+      gpa_cumulative_min: source.eligibilityRules.minGpaCumulative ?? null,
       gpa_scale: 4.5,
       credits_recent_min: source.eligibilityRules.minCreditsRecent ?? null,
       credits_recent_min_last_semester: null,
       income_bracket_max: source.eligibilityRules.maxIncomeBracket ?? null,
       special_status: source.eligibilityRules.specialStatusRequired ?? [],
       major_requirement: null,
-      region_requirement: null,
+      region_requirement: source.eligibilityRules.regionRequirement ?? null,
       other_conditions: source.eligibilityRules.notes ?? null,
     },
     duplicate_conflict: {

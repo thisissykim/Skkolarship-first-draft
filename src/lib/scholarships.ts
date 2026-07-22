@@ -31,9 +31,11 @@ export type Scholarship = {
   fitScore: number;
   eligibilityRules: {
     minGpaRecent?: number | null;
+    minGpaCumulative?: number | null;
     minCreditsRecent?: number | null;
     maxIncomeBracket?: number | null;
     gradeLevels?: string[] | null;
+    regionRequirement?: string | null;
     requiresNationalScholarshipApplication?: boolean;
     specialStatusRequired?: string[];
     notes?: string | null;
@@ -109,9 +111,11 @@ function convert(raw: RawScholarship): Scholarship {
     fitScore: fitScore(raw),
     eligibilityRules: {
       minGpaRecent: raw.eligibility.gpa_recent_min,
+      minGpaCumulative: raw.eligibility.gpa_cumulative_min,
       minCreditsRecent: raw.eligibility.credits_recent_min,
       maxIncomeBracket: raw.eligibility.income_bracket_max,
       gradeLevels: raw.eligibility.grade_level ? [raw.eligibility.grade_level] : null,
+      regionRequirement: raw.eligibility.region_requirement,
       requiresNationalScholarshipApplication: raw.eligibility.other_conditions?.includes("국가장학금") ?? false,
       specialStatusRequired: raw.eligibility.special_status,
       notes: raw.eligibility.other_conditions,

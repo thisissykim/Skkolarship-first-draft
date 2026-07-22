@@ -109,6 +109,66 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
     }
   }
 
+  // 거주 지역 — the seed data has real region_requirement text ("강남구 관내
+  // 연속 1년 이상 거주" 등) and onboarding collects profile.region, but nothing
+  // was ever connecting the two, so residency-only scholarships (구청/시 장학금)
+  // always fell through as ELIGIBLE regardless of where the student lives.
+  if (eligibility.region_requirement) {
+    const profileRegion = (profile as unknown as {
+      region?: { sido?: string | null; sigungu?: string | null; years_resided?: number | null };
+    }).region;
+    const parsed = parseRegionRequirement(eligibility.region_requirement);
+
+    if (!profileRegion || (!profileRegion.sido && !profileRegion.sigungu)) {
+      status = status === "지원불가" ? status : "조건부가능";
+      reasons.push("거주 지역 정보가 없어 조건부 가능으로 분류했습니다.");
+      criteria.push({
+        key: "region",
+        label: "거주 지역",
+        met: false,
+        detail: `요구 지역: ${eligibility.region_requirement} / 내 거주 지역 정보 없음`,
+        actionHint: "온보딩에서 거주 지역 정보를 입력해주세요.",
+      });
+    } else if (!parsed) {
+      // Requirement text doesn't match a clean "OO시/구 N년 이상 거주" pattern
+      // (e.g. OR conditions, "서울 소재 대학 재학" 등) — don't guess, ask the
+      // student to double check rather than silently marking ELIGIBLE.
+      status = status === "지원불가" ? status : "조건부가능";
+      reasons.push("거주 지역 조건이 자동으로 판별하기 어려운 형태라 조건부 가능으로 분류했습니다.");
+      criteria.push({
+        key: "region",
+        label: "거주 지역",
+        met: false,
+        detail: `요구 지역 조건: ${eligibility.region_requirement} — 자동 판별이 어려워요.`,
+        actionHint: "공식 공고에서 거주 지역 조건을 직접 확인해주세요.",
+      });
+    } else {
+      const studentDistrict = profileRegion.sigungu || profileRegion.sido || "";
+      const districtMatches =
+        studentDistrict.includes(parsed.district) || parsed.district.includes(studentDistrict);
+      const years = profileRegion.years_resided ?? 0;
+      const yearsMet = years >= parsed.minYears;
+      const met = districtMatches && yearsMet;
+
+      if (!met) {
+        status = "지원불가";
+        unmetConditions.push(`거주 지역 조건(${eligibility.region_requirement}) 미충족`);
+        reasons.push(
+          !districtMatches
+            ? `거주 지역 조건(${parsed.district})에 해당하지 않습니다.`
+            : `거주 기간이 기준(${parsed.minYears}년 이상)보다 짧습니다.`,
+        );
+      }
+      criteria.push({
+        key: "region",
+        label: "거주 지역",
+        met,
+        detail: `요구 지역: ${eligibility.region_requirement} / 내 거주 지역: ${studentDistrict || "미확인"}(${years}년 거주)`,
+        actionHint: met ? undefined : "거주 지역이나 거주 기간이 바뀌면 다시 확인해보세요.",
+      });
+    }
+  }
+
   // 직전학기 평점
   if (eligibility.gpa_recent_min != null) {
     if (profile.gpa_recent == null) {
@@ -318,6 +378,17 @@ function computeMatchBonus(profile: StudentProfile, scholarship: Scholarship) {
     scholarship.notes ? scholarship.notes.includes(activity) : false,
   ).length;
   return Math.min(20, matches * 5 + activityMatches * 3);
+}
+
+// Parses "OO시/구/군 [관내] [연속] N년 이상 [계속] 거주" style free text into a
+// district name + minimum years. Matches the region_requirement phrasing actually
+// used in the seed data ("강남구 관내 연속 1년 이상 거주", "수원시 2년 이상 계속
+// 거주" 등). Returns null for anything else (OR conditions, "서울 소재 대학
+// 재학" 등) — those get surfaced as "조건부가능, 직접 확인" rather than guessed.
+function parseRegionRequirement(text: string): { district: string; minYears: number } | null {
+  const match = text.match(/([가-힣]{2,6}(?:시|군|구))\s*(?:관내\s*)?(?:연속\s*)?([0-9]+)\s*년\s*이상\s*(?:계속\s*)?거주/);
+  if (!match) return null;
+  return { district: match[1], minYears: Number(match[2]) };
 }
 
 // Pulls explicit grade digits (1-4) out of free-text grade_level descriptions. Handles comma
