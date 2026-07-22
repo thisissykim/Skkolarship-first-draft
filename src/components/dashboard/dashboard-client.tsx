@@ -16,6 +16,7 @@ import { useFavoritesStore } from "@/store/useFavoritesStore";
 type Props = {
   scholarships: Scholarship[];
   combination: CombinationResult;
+  userName: string | null;
 };
 
 type SortKey = "deadline" | "amount" | "fit";
@@ -29,7 +30,7 @@ const TAB_LABELS: Record<TabKey, string> = {
   CALENDAR: "찜한 장학금 캘린더",
 };
 
-export default function DashboardClient({ scholarships, combination }: Props) {
+export default function DashboardClient({ scholarships, combination, userName }: Props) {
   const [activeTab, setActiveTab] = useState<TabKey>("ELIGIBLE");
   const [sortKey, setSortKey] = useState<SortKey>("fit");
   const [activeTags, setActiveTags] = useState<string[]>([]);
@@ -125,7 +126,7 @@ export default function DashboardClient({ scholarships, combination }: Props) {
           </div>
         </div>
 
-        <BestCombinationCard combination={combination} />
+        <BestCombinationCard combination={combination} userName={userName} />
 
         <section className="mt-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">

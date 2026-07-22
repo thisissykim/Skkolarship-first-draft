@@ -25,5 +25,5 @@ export default async function DashboardPage() {
   const scholarships = getPersonalizedScholarships(savedProfile);
   const combination = getBestScholarshipCombination(savedProfile);
 
-  return <DashboardClient scholarships={scholarships} combination={combination} />;
+  return <DashboardClient scholarships={scholarships} combination={combination} userName={session.user.name ?? null} />;
 }

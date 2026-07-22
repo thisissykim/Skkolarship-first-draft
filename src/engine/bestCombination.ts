@@ -10,9 +10,12 @@ export type CombinationResult = {
 };
 
 export function bestCombination(profile: StudentProfile, scholarships: Scholarship[]): CombinationResult {
+  // Only count confirmed-eligible scholarships — 조건부가능 (needs manual
+  // verification, e.g. missing income/GPA data) isn't guaranteed money and
+  // shouldn't inflate a headline "최대 수령 가능 N원" total.
   const matched = scholarships
     .map((scholarship) => ({ scholarship, match: matchScholarship(profile, scholarship) }))
-    .filter(({ match }) => match.status !== "지원불가");
+    .filter(({ match }) => match.status === "지원가능");
 
   const living = matched
     .filter(({ scholarship }) => scholarship.type !== "등록금성")
