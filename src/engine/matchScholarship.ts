@@ -636,6 +636,40 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
     }
   }
 
+  // 직전학기 과락(F) 없어야 함 — has_f_grade_recent는 성적표 파싱 때 이미 추출되지만
+  // 어디에서도 확인되지 않고 있었음.
+  if (detectNoFGradeRequirement(eligibility.other_conditions ?? "")) {
+    const hasF = (profile as unknown as { has_f_grade_recent?: boolean | null }).has_f_grade_recent ?? null;
+    if (hasF == null) {
+      status = status === "지원불가" ? status : "조건부가능";
+      reasons.push("직전학기 F학점 여부가 확인되지 않아 조건부 가능으로 분류했습니다.");
+      criteria.push({
+        key: "no_f_grade",
+        label: "직전학기 F학점 여부",
+        met: false,
+        detail: "이 장학금은 직전학기 과락(F)이 없어야 해요. 정보가 없어요.",
+        actionHint: "성적증명서 정보를 다시 확인해주세요.",
+      });
+    } else if (hasF) {
+      status = "지원불가";
+      unmetConditions.push("직전학기 F학점 있음");
+      reasons.push("이 장학금은 직전학기 과락(F)이 없어야 하는데, F학점이 있는 것으로 확인됩니다.");
+      criteria.push({
+        key: "no_f_grade",
+        label: "직전학기 F학점 여부",
+        met: false,
+        detail: "직전학기에 F학점(과락)이 있어요.",
+      });
+    } else {
+      criteria.push({
+        key: "no_f_grade",
+        label: "직전학기 F학점 여부",
+        met: true,
+        detail: "직전학기에 F학점(과락)이 없어요.",
+      });
+    }
+  }
+
   // 윤세영 스칼라십 — "부모 직장 학자금 지원 미수혜자"만 명시적으로 제외. ext-wooin과
   // 달리 교외재단/기업 수혜는 이 장학금과 무관하므로 별도로 좁혀서 확인.
   if (scholarship.id === "ext-yoon-seyoung") {
@@ -1002,6 +1036,12 @@ function detectForeignExclusion(text: string): boolean {
     if (/외국인/.test(window)) return true;
   }
   return false;
+}
+
+// "직전학기 과락(F) 없어야 함" 류의 조건 — has_f_grade_recent는 성적표 파싱 때 이미
+// 추출되지만 어디에서도 확인되지 않고 있었음.
+function detectNoFGradeRequirement(text: string): boolean {
+  return /(?:과락|F\s*학점|낙제)[^.]{0,10}(?:없어야|불가|제외)/.test(text);
 }
 
 function parseMajorKeywords(text: string): string[] {
