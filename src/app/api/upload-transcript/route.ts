@@ -27,6 +27,17 @@ const TRANSCRIPT_SCHEMA: JsonSchema = {
         "성적표에 학기별로 기재된 '평점계' 값 중 가장 마지막(최근) 학기 행의 값. 직전학기 백분위를 의미함, 0~100 사이 숫자. 학기별 평점계 표가 없으면 생략할 것.",
     },
     credits_recent: { type: "number", description: "가장 최근 학기에 이수한 학점" },
+    semester_credits: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          semester: { type: "string", description: "'YYYY-N' 형식(N은 1 또는 2). 예: 2025년 1학기 -> '2025-1'" },
+          credits: { type: "number", description: "그 학기에 이수한 학점" },
+        },
+      },
+      description: "성적표에 나온 '정규학기'별 이수학점을 학기마다 하나씩 나열. regular_semester_labels와 같은 학기 목록을 사용할 것.",
+    },
     has_f_grade_recent: { type: "boolean", description: "가장 최근 학기에 F 학점이 있는지 여부" },
     credits_total: { type: "number", description: "지금까지 이수한 전체 누적 학점" },
     course_history: {
@@ -89,6 +100,7 @@ function normalizeTranscript(extracted: Record<string, unknown>): ParsedTranscri
     gpa_recent: toNumberOrNull(extracted.gpa_recent),
     percentile_recent: toNumberOrNull(extracted.percentile_recent),
     credits_recent: toNumberOrNull(extracted.credits_recent),
+    semester_credits: toSemesterCredits(extracted.semester_credits),
     has_f_grade_recent: toBooleanOrNull(extracted.has_f_grade_recent),
     credits_total: toNumberOrNull(extracted.credits_total),
     course_history: Array.isArray(extracted.course_history)
@@ -101,6 +113,20 @@ function normalizeTranscript(extracted: Record<string, unknown>): ParsedTranscri
 }
 
 const SEMESTER_LABEL_PATTERN = /^(\d{4})-([12])$/;
+
+function toSemesterCredits(value: unknown): { semester: string; credits: number }[] {
+  if (!Array.isArray(value)) return [];
+  const entries: { semester: string; credits: number }[] = [];
+  for (const item of value) {
+    if (typeof item !== "object" || item === null) continue;
+    const semester = (item as Record<string, unknown>).semester;
+    const credits = toNumberOrNull((item as Record<string, unknown>).credits);
+    if (typeof semester === "string" && SEMESTER_LABEL_PATTERN.test(semester) && credits != null) {
+      entries.push({ semester, credits });
+    }
+  }
+  return entries;
+}
 
 // Grade level from *count of regular semesters completed*, not calendar years
 // since admission — a student who took a leave of absence (휴학) shouldn't be

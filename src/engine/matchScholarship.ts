@@ -777,6 +777,44 @@ export function matchScholarship(profile: StudentProfile, scholarship: Scholarsh
     }
   }
 
+  // 윤송조창석 장학금 — "전년도 1,2학기 각 12학점 이상 이수". 직전학기 학점만으로는
+  // 확인이 안 돼서 학기별 이수학점(semester_credits)이 필요했고, 이번에 성적표 파싱을
+  // 확장해서 추가했다. 2026년 1학기 진학예정자 기준이라 "전년도"는 2025년으로 고정.
+  if (scholarship.id === "ext-yoonsong-jochangseok") {
+    const semesterCredits = (profile as unknown as { semester_credits?: { semester: string; credits: number }[] }).semester_credits ?? [];
+    const target = ["2025-1", "2025-2"];
+    const found = target.map((semester) => semesterCredits.find((entry) => entry.semester === semester) ?? null);
+
+    if (found.every((entry) => entry == null)) {
+      status = status === "지원불가" ? status : "조건부가능";
+      reasons.push("전년도 학기별 이수학점 정보가 없어 조건부 가능으로 분류했습니다.");
+      criteria.push({
+        key: "semester_credits",
+        label: "전년도 학기별 이수학점",
+        met: false,
+        detail: "요구 조건: 2025년 1,2학기 각 12학점 이상 / 학기별 이수학점 정보 없음",
+        actionHint: "성적증명서 정보를 다시 확인해주세요.",
+      });
+    } else {
+      const met = found.every((entry) => entry != null && entry.credits >= 12);
+      if (!met) {
+        status = "지원불가";
+        unmetConditions.push("전년도 학기별 이수학점 미달");
+        reasons.push("이 장학금은 전년도 1,2학기 각 12학점 이상 이수해야 하는데, 기준에 못 미치는 학기가 있습니다.");
+      }
+      const detailText = target
+        .map((semester, index) => `${semester}: ${found[index]?.credits ?? "정보 없음"}학점`)
+        .join(", ");
+      criteria.push({
+        key: "semester_credits",
+        label: "전년도 학기별 이수학점",
+        met,
+        detail: `요구 조건: 2025년 1,2학기 각 12학점 이상 / ${detailText}`,
+        actionHint: met ? undefined : "이수학점이 바뀌면 다시 확인해보세요.",
+      });
+    }
+  }
+
   // 삼성융합인재Track장학금 — 특정 신입생 학과, 외국인전형 입학자는 지원 불가.
   // "삼성과학인재Track 선발자는 지원 불가"는 데이터가 없어 텍스트 안내로만 남긴다.
   if (scholarship.id === "skku-samsung-convergence-track") {
@@ -1080,7 +1118,28 @@ const CONDITIONAL_GATES: Record<
     { questionId: "research-plan", requireTrue: true, label: "연구계획", requirementText: "연구 지도교수와 함께하는 연구계획이 필요해요." },
   ],
   "skku-medical-ai-research": [
-    { questionId: "research-plan", requireTrue: true, label: "연구계획", requirementText: "의료AI 관련 연구/논문 참여 계획이 필요해요." },
+    {
+      questionId: "medical-ai-track-complete",
+      requireTrue: true,
+      label: "의료AI 마이크로디그리·논문·사업참여 조건",
+      requirementText: "의료AI 마이크로디그리(Track A/B) 이수 중, 의료AI 관련 KCI급 이상 논문 출판, 사업 참여 누적 1년 이상을 모두 충족해야 해요.",
+    },
+  ],
+  "skku-ai-microdegree": [
+    {
+      questionId: "ai-microdegree-complete",
+      requireTrue: true,
+      label: "AI 마이크로디그리 이수",
+      requirementText: "2026년 1학기에 9개 AI 마이크로디그리 과정 중 하나를 이수하고, 4과목 평균 B+ 이상이어야 해요.",
+    },
+  ],
+  "ext-wooin": [
+    {
+      questionId: "wooin-eligibility",
+      requireTrue: true,
+      label: "지원 자격(저소득/성적우수/봉사/예체능)",
+      requirementText: "저소득 가정, 성적우수, 봉사정신, 예체능 재능 중 1개 이상 해당해야 해요.",
+    },
   ],
   "skku-campus-life-didimdol": [
     { questionId: "freshman", requireTrue: true, label: "신입생 여부", requirementText: "학부 신입생만 지원 가능해요." },

@@ -12,6 +12,7 @@ export interface ParsedTranscript {
   gpa_recent: number | null;
   percentile_recent: number | null;
   credits_recent: number | null;
+  semester_credits: { semester: string; credits: number }[];
   has_f_grade_recent: boolean | null;
   credits_total: number | null;
   course_history: string[];
@@ -213,7 +214,44 @@ export const CONDITIONAL_TRIGGERS: ConditionalTrigger[] = [
     trigger_id: "research-plan",
     condition: (profile) => Boolean(profile.research_plan) || /보건|사회복지/.test((profile.department ?? profile.major ?? "").toLowerCase()),
     questions: [{ id: "research-plan", label: "연구계획이 있나요?", type: "boolean" }],
-    related_scholarship_ids: ["ext-bogeon-research", "skku-medical-ai-research"],
+    related_scholarship_ids: ["ext-bogeon-research"],
+  },
+  {
+    trigger_id: "medical-ai-track",
+    condition: () => true,
+    questions: [
+      {
+        id: "medical-ai-track-complete",
+        label:
+          "의료AI 마이크로디그리(Track A/B) 또는 관련 대학원 과정을 이수 중이고, 의료AI 관련 KCI급 이상 논문 출판(1저자/차석/교신) 및 사업 참여 누적 1년 이상 조건을 모두 충족하나요?",
+        type: "boolean",
+      },
+    ],
+    related_scholarship_ids: ["skku-medical-ai-research"],
+  },
+  {
+    trigger_id: "ai-microdegree-complete",
+    condition: () => true,
+    questions: [
+      {
+        id: "ai-microdegree-complete",
+        label: "2026년 1학기에 9개 AI 마이크로디그리 과정 중 하나를 이수했고, 이수 4과목 평균이 B+ 이상인가요?",
+        type: "boolean",
+      },
+    ],
+    related_scholarship_ids: ["skku-ai-microdegree"],
+  },
+  {
+    trigger_id: "wooin-self-declare",
+    condition: () => true,
+    questions: [
+      {
+        id: "wooin-eligibility",
+        label: "저소득 가정, 성적우수, 봉사정신, 예체능 재능 중 하나 이상 해당하나요?",
+        type: "boolean",
+      },
+    ],
+    related_scholarship_ids: ["ext-wooin"],
   },
   {
     trigger_id: "freshman",
@@ -315,4 +353,7 @@ export const WIRED_TRIGGER_IDS = [
   "freshman",
   "exam-qualification",
   "skku-family-alumni",
+  "medical-ai-track",
+  "ai-microdegree-complete",
+  "wooin-self-declare",
 ];

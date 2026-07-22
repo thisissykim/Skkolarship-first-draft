@@ -23,6 +23,7 @@ function extractTranscript(saved: Record<string, unknown>): ParsedTranscript {
     gpa_recent: (saved.gpa_recent as number | null) ?? null,
     percentile_recent: (saved.percentile_recent as number | null) ?? null,
     credits_recent: (saved.credits_recent as number | null) ?? null,
+    semester_credits: (saved.semester_credits as ParsedTranscript["semester_credits"]) ?? [],
     has_f_grade_recent: (saved.has_f_grade_recent as boolean | null) ?? null,
     credits_total: (saved.credits_total as number | null) ?? null,
     course_history: (saved.course_history as string[]) ?? [],
